@@ -7,23 +7,34 @@ use std::cmp::Ordering;
 
 fn main()
 {
-  let secret_number = rand::thread_rng().gen_range(1, 11);
-
   println!("Guessing Game!");
-  let mut guess = String::new();
-  
-  println!("Enter your guess:");
-  
-  std::io::stdin().read_line(&mut guess).expect("Unable to read input");
-  println!("You guessed {}", guess);
-
-  println!("Secret Number: {}", secret_number);
-
-  let guess : u32 = guess.trim().parse().expect("Unable to parse number!");
-  match guess.cmp(&secret_number)
+  loop
   {
-    Ordering::Less => println!("Too small!"),
-    Ordering::Greater => println!("Too large!"),
-    Ordering::Equal => println!("You won!"),
+    let secret_number = rand::thread_rng().gen_range(1, 3);
+    let mut guess = String::new();
+      
+    println!("Enter your guess:");
+    
+    std::io::stdin().read_line(&mut guess).expect("Unable to read input");
+    let guess : u32 = match guess.trim().parse() {
+      Ok(num) => num,
+      Err(_) => {
+        println!("Enter valid number!");
+        continue;
+      }
+    };
+
+    println!("You guessed {}", guess);
+    println!("Secret number {}", secret_number);
+
+    match guess.cmp(&secret_number)
+    {
+      Ordering::Less => println!("Too small!"),
+      Ordering::Greater => println!("Too large!"),
+      Ordering::Equal => {
+         println!("You won!");
+         break;
+      }
+    };
   }
 }
